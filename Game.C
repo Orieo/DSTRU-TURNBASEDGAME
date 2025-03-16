@@ -29,3 +29,5 @@ int main() {
     initialize_system();
     return 0;
 }
+
+a=0;
