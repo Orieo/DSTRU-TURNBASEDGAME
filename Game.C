@@ -5,21 +5,25 @@
 
 // Initialize the system
 void initialize_system(int Uno[][2], int Dos[][2], int Tres[][2], int* turn, int* go) {
-     // Ensure sets are empty
-	for (int i=0; i<MAX_POSITIONS; i++) {
-        Uno[i][0] = -1;
-        Uno[i][1] = -1;
-        Dos[i][0] = -1;
-        Dos[i][1] = -1;
-        Tres[i][0] = -1;
-        Tres[i][1] = -1;
+	int i, j, initialized=1;
+	
+	// Ensure sets are empty
+	for (i=0; i<MAX_POSITIONS; i++) {
+        for (j=0; j<2; j++) {
+            if (Uno[i][j]!= 0||Dos[i][j]!= 0||Tres[i][j]!= 0) {
+                initialized=0;
+            }
+        }
     }
 	
     *turn=1; 
     *go=0; 
     
-    printf("System initialized.\n");
-    printf("Uno, Dos, Tres are empty.\n");
+	if(initialized){
+		printf("System initialized.\n");
+		printf("Uno, Dos, Tres are empty.\n");
+	}
+	
     if(*turn)
 		printf("turn = true\n");
 	else
@@ -36,7 +40,7 @@ int calculate_size(int Set[][2]){
     int i, count=0;
 	
     for (i=0; i<MAX_POSITIONS; i++) {
-        if (Set[i][0]!=-1&&Set[i][1]!=-1){
+        if (Set[i][0]!=0&&Set[i][1]!=0){
             count++;
         }
     }
@@ -74,6 +78,7 @@ uno_union_tres(int Uno[][2], int Tres[][2], int Union[][2], int uno_size, int tr
 	return UNION;
 }
 
+//F=P-(Uno U Tres)
 int
 UpdateF(int P[][2], int Uno[][2], int Tres[][2], int F[][2]){
 	int i=0, j=0, k=0, index=0, found=0, shift=0;
@@ -131,9 +136,9 @@ int main() {
 	
 	//System variables
 	int turn, go, over=0;
-	int Uno[MAX_POSITIONS][2];
-	int Dos[MAX_POSITIONS][2];
-	int Tres[MAX_POSITIONS][2];
+	int Uno[MAX_POSITIONS][2]={0};
+	int Dos[MAX_POSITIONS][2]={0};
+	int Tres[MAX_POSITIONS][2]={0};
 	int F[MAX_POSITIONS][2];
 	
 	//System initialization
@@ -143,6 +148,10 @@ int main() {
 	int F_size;
 	F_size=UpdateF(P, Uno, Tres, F); //F=P-(Uno U Tres)
 	//W=C-T
+	int W[4][4][2]={{{1,1}, {1,2}, {1,3}, {1,4}},
+					{{1,1}, {2,2}, {3,3}, {4,4}},
+					{{1,4}, {2,3}, {3,2}, {4,1}},
+					{{4,1}, {4,2}, {4,3}, {4,4}}};
 	
     return 0;
 }
