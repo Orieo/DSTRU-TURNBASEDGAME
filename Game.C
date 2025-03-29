@@ -106,9 +106,18 @@ UpdateF(int P[][2], int Uno[][2], int Tres[][2], int F[][2]){
 		}
 		
 		if(found){
+			//shift element to the left to remove current element
 			for (shift=j; shift<index-1; shift++) {
 				F[shift][0] = F[shift+1][0];
 				F[shift][1] = F[shift+1][1];
+				F[shift+1][0] = 0;
+				F[shift+1][1] = 0;
+			}
+			
+			//Special case: if there is only one element left
+			if (index == 1) {
+				F[0][0] = 0;
+				F[0][1] = 0;
 			}
 			
 			index--;
@@ -122,36 +131,44 @@ UpdateF(int P[][2], int Uno[][2], int Tres[][2], int F[][2]){
 int main() {
 	
 	//Applicable Sets
-	int A[4]={1, 2, 3, 4};
-	int P[16][2]={{1,1}, {1,2}, {1,3}, {1,4}, 
-				  {2,1}, {2,2}, {2,3}, {2,4}, 
-				  {3,1}, {3,2}, {3,3}, {3,4}, 
-				  {4,1}, {4,2}, {4,3}, {4,4}};
-	int B[2]={1,0};
-	int C[4][4][2]={{{1,1}, {1,2}, {1,3}, {1,4}},
-					{{1,1}, {2,2}, {3,3}, {4,4}},
-					{{1,4}, {2,3}, {3,2}, {4,1}},
-					{{4,1}, {4,2}, {4,3}, {4,4}}};
-	int T[4][2]={{1,1}, {2,2}, {3,3}, {4,4}};
+		int A[4]={1, 2, 3, 4};
+		int P[16][2]={{1,1}, {1,2}, {1,3}, {1,4}, 
+					  {2,1}, {2,2}, {2,3}, {2,4}, 
+					  {3,1}, {3,2}, {3,3}, {3,4}, 
+					  {4,1}, {4,2}, {4,3}, {4,4}};
+		int B[2]={1,0};
+		int C[4][4][2]={{{1,1}, {1,2}, {1,3}, {1,4}},
+						{{1,1}, {2,2}, {3,3}, {4,4}},
+						{{1,4}, {2,3}, {3,2}, {4,1}},
+						{{4,1}, {4,2}, {4,3}, {4,4}}};
+		int T[4][2]={{1,1}, {2,2}, {3,3}, {4,4}};
 	
 	//System variables
-	int turn, go, over=0;
-	int Uno[MAX_POSITIONS][2]={0};
-	int Dos[MAX_POSITIONS][2]={0};
-	int Tres[MAX_POSITIONS][2]={0};
-	int F[MAX_POSITIONS][2];
+		int turn, go, over=0;
+		int Uno[MAX_POSITIONS][2]={0};
+		int Dos[MAX_POSITIONS][2]={0};
+		int Tres[MAX_POSITIONS][2]={0};
+		int F[MAX_POSITIONS][2]={0};
 	
 	//System initialization
-	initialize_system(Uno, Dos, Tres, &turn, &go);
+		initialize_system(Uno, Dos, Tres, &turn, &go);
 	
 	//Sytem Facts
-	int F_size;
-	F_size=UpdateF(P, Uno, Tres, F); //F=P-(Uno U Tres)
-	//W=C-T
-	int W[4][4][2]={{{1,1}, {1,2}, {1,3}, {1,4}},
-					{{1,1}, {2,2}, {3,3}, {4,4}},
-					{{1,4}, {2,3}, {3,2}, {4,1}},
-					{{4,1}, {4,2}, {4,3}, {4,4}}};
+		//F=P-(Uno U Tres)
+		int F_size;
+		F_size=UpdateF(P, Uno, Tres, F); 
+		
+		//W=C-T
+		int W[4][4][2]={{{1,1}, {1,2}, {1,3}, {1,4}},
+						{{1,1}, {2,2}, {3,3}, {4,4}},
+						{{1,4}, {2,3}, {3,2}, {4,1}},
+						{{4,1}, {4,2}, {4,3}, {4,4}}};
+		
+		//over ↔ (Uno ∈ W ∨ Tres ∈ W ∨ F = ∅)
+		if(F_size==0||Uno ∈ W ∨ Tres ∈ W)
+			over=1;
+	
+	//System states and behavior
 	
     return 0;
 }
